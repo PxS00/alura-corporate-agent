@@ -1,5 +1,9 @@
 # Alura Corporate Agent
 
+<div align="center">
+  <img src="docs/images/badge-rag-agente-ia.png" alt="Badge ONE - Agente de IA com RAG" width="180" />
+</div>
+
 Agente corporativo de Inteligência Artificial com **RAG (Retrieval-Augmented Generation)**, desenvolvido para o **Challenge AluraAgente - ONE IA for Tech**.
 
 O projeto simula uma base de conhecimento interna da empresa fictícia **NexaCorp**. O agente processa documentos corporativos, cria embeddings, realiza busca semântica e responde perguntas utilizando apenas informações encontradas na base indexada, exibindo as fontes utilizadas.

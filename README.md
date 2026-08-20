@@ -343,42 +343,45 @@ O MVP aplica controles simples para reduzir alucinações e exposição indevida
 
 Para um ambiente corporativo real ainda seriam necessários autenticação, autorização, governança de dados, gestão centralizada de segredos, auditoria e controles adicionais de segurança.
 
-## Deploy na Oracle Cloud Infrastructure
+## ☁️ Deploy na Oracle Cloud Infrastructure (OCI)
 
-A etapa de deploy será executada após os testes locais.
+A aplicação foi implantada na Oracle Cloud Infrastructure utilizando uma instância do serviço OCI Compute, executando Ubuntu 24.04 e Docker Compose.
 
-O MVP foi preparado para utilizar uma **OCI Compute Instance** como serviço obrigatório do ecossistema Oracle Cloud.
+O agente é disponibilizado por meio do Streamlit na porta `8501`, com acesso público pela instância da OCI.
 
-Fluxo previsto:
+A arquitetura utilizada no deploy é composta por:
+
+- OCI Compute
+- Ubuntu 24.04
+- Docker Engine
+- Docker Compose
+- Streamlit
+- ChromaDB
+- Gemini API
+
+### Arquitetura do deploy
 
 ```text
-GitHub
-  ↓
+Usuário
+  │
+  ▼
+Navegador
+  │
+  ▼
 OCI Compute
-  ↓
-Docker
-  ↓
-Streamlit + RAG
-  ↓
-IP público / endpoint da aplicação
-```
-
-Na VM OCI, o fluxo esperado será semelhante a:
-
-```bash
-git clone https://github.com/PxS00/alura-corporate-agent.git
-cd alura-corporate-agent
-cp .env.example .env
-# configurar GEMINI_API_KEY
-
-docker compose up --build -d
-```
-
-Depois será necessário liberar a porta da aplicação de forma controlada na configuração de rede da OCI.
-
-## Demonstração em nuvem
-
-A imagem ou vídeo exigido pelo challenge será adicionado nesta seção depois do deploy na OCI.
+Ubuntu 24.04
+VM.Standard.E2.1.Micro
+  │
+  ▼
+Docker Compose
+  │
+  ▼
+Alura Corporate Agent
+Streamlit + Pipeline RAG
+  │
+  ├── ChromaDB
+  │
+  └── Gemini API
 
 ## Limitações do MVP
 
@@ -391,16 +394,6 @@ A imagem ou vídeo exigido pelo challenge será adicionado nesta seção depois 
 - utiliza uma base documental fictícia e pequena.
 
 Essas limitações são intencionais para manter o challenge simples, funcional e entregável.
-
-## Próximos passos
-
-1. executar os testes localmente;
-2. validar perguntas conhecidas e perguntas sem resposta;
-3. validar execução via Docker;
-4. realizar deploy na OCI Compute;
-5. registrar a aplicação rodando em nuvem;
-6. adicionar a evidência visual ao README;
-7. finalizar a entrega do challenge.
 
 ## Autor
 

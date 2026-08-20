@@ -11,11 +11,9 @@ O projeto simula uma base de conhecimento interna da empresa fictícia **NexaCor
 - Interface Streamlit: concluída
 - Container Docker: concluído
 - Testes automatizados: implementados
-- Validação local: pendente
-- Deploy OCI: pendente
-- Registro visual da execução em nuvem: pendente
-
-> O deploy e a captura da aplicação em nuvem serão realizados após a validação local do projeto.
+- Validação local: concluída
+- Deploy OCI: concluído
+- Registro visual da execução em nuvem: concluído
 
 ## Requisitos do challenge
 
@@ -27,8 +25,8 @@ O projeto simula uma base de conhecimento interna da empresa fictícia **NexaCor
 | Busca semântica e RAG | Concluído |
 | Interface funcional | Concluído |
 | Containerização | Concluído |
-| Uso de ao menos um serviço OCI | Pendente de deploy |
-| Imagem ou vídeo da execução em nuvem no README | Pendente de deploy |
+| Uso de ao menos um serviço OCI | Concluído |
+| Imagem ou vídeo da execução em nuvem no README | Concluído |
 
 ## Funcionalidades
 
@@ -187,7 +185,6 @@ Cada documento recebe automaticamente metadados como:
 ```bash
 git clone https://github.com/PxS00/alura-corporate-agent.git
 cd alura-corporate-agent
-git switch feature/mvp-rag-agent
 ```
 
 ### 2. Crie o ambiente virtual
@@ -343,42 +340,62 @@ O MVP aplica controles simples para reduzir alucinações e exposição indevida
 
 Para um ambiente corporativo real ainda seriam necessários autenticação, autorização, governança de dados, gestão centralizada de segredos, auditoria e controles adicionais de segurança.
 
-## Deploy na Oracle Cloud Infrastructure
+## ☁️ Deploy na Oracle Cloud Infrastructure (OCI)
 
-A etapa de deploy será executada após os testes locais.
+A aplicação foi implantada na Oracle Cloud Infrastructure utilizando uma instância do serviço OCI Compute, executando Ubuntu 24.04 e Docker Compose.
 
-O MVP foi preparado para utilizar uma **OCI Compute Instance** como serviço obrigatório do ecossistema Oracle Cloud.
+O agente é disponibilizado por meio do Streamlit na porta `8501`, com acesso público pela instância da OCI.
 
-Fluxo previsto:
+A arquitetura utilizada no deploy é composta por:
+
+- OCI Compute
+- Ubuntu 24.04
+- Docker Engine
+- Docker Compose
+- Streamlit
+- ChromaDB
+- Gemini API
+
+### Arquitetura do deploy
 
 ```text
-GitHub
-  ↓
+Usuário
+  │
+  ▼
+Navegador
+  │
+  ▼
 OCI Compute
-  ↓
-Docker
-  ↓
-Streamlit + RAG
-  ↓
-IP público / endpoint da aplicação
+Ubuntu 24.04
+VM.Standard.E2.1.Micro
+  │
+  ▼
+Docker Compose
+  │
+  ▼
+Alura Corporate Agent
+Streamlit + Pipeline RAG
+  │
+  ├── ChromaDB
+  │
+  └── Gemini API
 ```
 
-Na VM OCI, o fluxo esperado será semelhante a:
+### Evidências de execução na nuvem
 
-```bash
-git clone https://github.com/PxS00/alura-corporate-agent.git
-cd alura-corporate-agent
-cp .env.example .env
-# configurar GEMINI_API_KEY
+As capturas abaixo apresentam o endereço público da instância OCI na porta `8501`, comprovando a execução da aplicação em ambiente de nuvem.
 
-docker compose up --build -d
-```
+#### 1. Consulta com resposta fundamentada e citação de fonte
 
-Depois será necessário liberar a porta da aplicação de forma controlada na configuração de rede da OCI.
+A captura abaixo demonstra o agente executando na OCI, respondendo uma pergunta com base na documentação corporativa e apresentando a fonte utilizada na recuperação da informação.
 
-## Demonstração em nuvem
+![Execução na OCI - Consulta com citação de fontes](docs/images/oci-demo-1.png)
 
-A imagem ou vídeo exigido pelo challenge será adicionado nesta seção depois do deploy na OCI.
+#### 2. Fallback seguro quando a informação não existe na base
+
+A segunda evidência demonstra o comportamento do agente quando a informação solicitada não está disponível na base de conhecimento. Nesse caso, o sistema evita gerar uma resposta não fundamentada e informa que não encontrou a informação nos documentos disponíveis.
+
+![Execução na OCI - Fallback sem alucinação](docs/images/oci-demo-2.png)
 
 ## Limitações do MVP
 
@@ -391,16 +408,6 @@ A imagem ou vídeo exigido pelo challenge será adicionado nesta seção depois 
 - utiliza uma base documental fictícia e pequena.
 
 Essas limitações são intencionais para manter o challenge simples, funcional e entregável.
-
-## Próximos passos
-
-1. executar os testes localmente;
-2. validar perguntas conhecidas e perguntas sem resposta;
-3. validar execução via Docker;
-4. realizar deploy na OCI Compute;
-5. registrar a aplicação rodando em nuvem;
-6. adicionar a evidência visual ao README;
-7. finalizar a entrega do challenge.
 
 ## Autor
 

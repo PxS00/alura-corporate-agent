@@ -1,0 +1,15 @@
+services:
+  agent:
+    build:
+      context: .
+    container_name: alura-corporate-agent
+    env_file:
+      - .env
+    ports:
+      - "8501:8501"
+    volumes:
+      - chroma-data:/app/.chroma
+    restart: unless-stopped
+
+volumes:
+  chroma-data:

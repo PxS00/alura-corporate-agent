@@ -11,11 +11,9 @@ O projeto simula uma base de conhecimento interna da empresa fictícia **NexaCor
 - Interface Streamlit: concluída
 - Container Docker: concluído
 - Testes automatizados: implementados
-- Validação local: pendente
-- Deploy OCI: pendente
-- Registro visual da execução em nuvem: pendente
-
-> O deploy e a captura da aplicação em nuvem serão realizados após a validação local do projeto.
+- Validação local: concluída
+- Deploy OCI: concluído
+- Registro visual da execução em nuvem: concluído
 
 ## Requisitos do challenge
 
@@ -27,8 +25,8 @@ O projeto simula uma base de conhecimento interna da empresa fictícia **NexaCor
 | Busca semântica e RAG | Concluído |
 | Interface funcional | Concluído |
 | Containerização | Concluído |
-| Uso de ao menos um serviço OCI | Pendente de deploy |
-| Imagem ou vídeo da execução em nuvem no README | Pendente de deploy |
+| Uso de ao menos um serviço OCI | Concluído |
+| Imagem ou vídeo da execução em nuvem no README | Concluído |
 
 ## Funcionalidades
 
@@ -382,6 +380,23 @@ Streamlit + Pipeline RAG
   ├── ChromaDB
   │
   └── Gemini API
+```
+
+### Evidências de execução na nuvem
+
+As capturas abaixo apresentam o endereço público da instância OCI na porta `8501`, comprovando a execução da aplicação em ambiente de nuvem.
+
+#### 1. Consulta com resposta fundamentada e citação de fonte
+
+A captura abaixo demonstra o agente executando na OCI, respondendo uma pergunta com base na documentação corporativa e apresentando a fonte utilizada na recuperação da informação.
+
+![Execução na OCI - Consulta com citação de fontes](docs/images/oci-demo-1.png)
+
+#### 2. Fallback seguro quando a informação não existe na base
+
+A segunda evidência demonstra o comportamento do agente quando a informação solicitada não está disponível na base de conhecimento. Nesse caso, o sistema evita gerar uma resposta não fundamentada e informa que não encontrou a informação nos documentos disponíveis.
+
+![Execução na OCI - Fallback sem alucinação](docs/images/oci-demo-2.png)
 
 ## Limitações do MVP
 

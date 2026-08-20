@@ -38,7 +38,6 @@ def make_settings() -> Settings:
         chunk_overlap=150,
         top_k=4,
         max_cosine_distance=0.65,
-        relevance_distance_margin=0.10,
     )
 
 
@@ -86,7 +85,7 @@ def test_agent_falls_back_when_search_is_not_relevant():
     assert ai_client.generated_prompt is None
 
 
-def test_agent_excludes_results_far_from_best_match():
+def test_agent_uses_only_best_semantic_match():
     ai_client = FakeAiClient()
     store = FakeVectorStore(
         [
@@ -100,13 +99,13 @@ def test_agent_excludes_results_far_from_best_match():
                 distance=0.20,
             ),
             SearchResult(
-                text="O onboarding apresenta os sistemas internos da empresa.",
+                text="Cada colaborador possui benefício anual para cursos e certificações.",
                 metadata={
-                    "source": "onboarding.html",
-                    "category": "operacional",
+                    "source": "faq.md",
+                    "category": "comunicacao",
                     "location": "seção: document",
                 },
-                distance=0.45,
+                distance=0.24,
             ),
         ]
     )
@@ -115,4 +114,4 @@ def test_agent_excludes_results_far_from_best_match():
     response = agent.ask("Quantos dias de férias os colaboradores possuem?")
 
     assert [source.source for source in response.sources] == ["politica_ferias.md"]
-    assert "onboarding.html" not in (ai_client.generated_prompt or "")
+    assert "faq.md" not in (ai_client.generated_prompt or "")

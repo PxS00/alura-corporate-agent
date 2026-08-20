@@ -39,7 +39,7 @@ class RagAgent:
         return AgentResponse(answer=answer, sources=sources)
 
     def _select_relevant(self, results: list[SearchResult]) -> list[SearchResult]:
-        """Keep results that pass the absolute threshold and remain close to the best match."""
+        """Select the single strongest semantic match after applying the confidence threshold."""
         eligible = [
             result
             for result in results
@@ -48,12 +48,7 @@ class RagAgent:
         if not eligible:
             return []
 
-        best_distance = min(result.distance for result in eligible)
-        relative_limit = min(
-            self._settings.max_cosine_distance,
-            best_distance + self._settings.relevance_distance_margin,
-        )
-        return [result for result in eligible if result.distance <= relative_limit]
+        return [min(eligible, key=lambda result: result.distance)]
 
     @staticmethod
     def _build_prompt(question: str, results: list[SearchResult]) -> str:

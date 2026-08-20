@@ -24,6 +24,7 @@ class Settings:
     chunk_overlap: int
     top_k: int
     max_cosine_distance: float
+    llm_fallback_model: str = "gemini-3.5-flash-lite"
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -39,6 +40,9 @@ class Settings:
             chunk_overlap=int(os.getenv("CHUNK_OVERLAP", "150")),
             top_k=int(os.getenv("TOP_K", "4")),
             max_cosine_distance=float(os.getenv("MAX_COSINE_DISTANCE", "0.65")),
+            llm_fallback_model=os.getenv(
+                "LLM_FALLBACK_MODEL", "gemini-3.5-flash-lite"
+            ).strip(),
         )
         settings.validate()
         return settings

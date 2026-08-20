@@ -24,6 +24,7 @@ def build_services():
         llm_model=settings.llm_model,
         embedding_model=settings.embedding_model,
         embedding_dimensions=settings.embedding_dimensions,
+        llm_fallback_model=settings.llm_fallback_model,
     )
     vector_store = VectorStore(settings.chroma_path, settings.chroma_collection)
     agent = RagAgent(settings, ai_client, vector_store)

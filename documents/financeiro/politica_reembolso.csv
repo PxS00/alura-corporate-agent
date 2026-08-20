@@ -1,0 +1,5 @@
+tipo_despesa,limite,regra,prazo_solicitacao
+Alimentação,R$ 120 por dia,Permitida em viagens corporativas previamente aprovadas,30 dias após a despesa
+Transporte,R$ 250 por deslocamento,Exige comprovante fiscal ou recibo válido,30 dias após a despesa
+Hospedagem,R$ 450 por diária,Deve estar vinculada a viagem corporativa aprovada,30 dias após a despesa
+Material de trabalho,R$ 300 por compra,Exige aprovação prévia da liderança,15 dias após a despesa

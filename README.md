@@ -185,7 +185,6 @@ Cada documento recebe automaticamente metadados como:
 ```bash
 git clone https://github.com/PxS00/alura-corporate-agent.git
 cd alura-corporate-agent
-git switch feature/mvp-rag-agent
 ```
 
 ### 2. Crie o ambiente virtual

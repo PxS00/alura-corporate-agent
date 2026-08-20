@@ -33,11 +33,15 @@ def build_services():
 def render_sources(sources: list[dict]) -> None:
     if not sources:
         return
+
     with st.expander("Fontes consultadas"):
         for source in sources:
-            st.markdown(
-                f"- **{source['source']}** — {source['category']} · {source['location']}"
-            )
+            source_name = source.get("source") or "Documento sem nome"
+            category = source.get("category") or "geral"
+            location = source.get("location") or "documento"
+
+            st.write(f"📄 {source_name}")
+            st.caption(f"Categoria: {category} · Localização: {location}")
 
 
 st.title("Alura Corporate Agent")

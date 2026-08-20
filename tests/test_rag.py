@@ -38,6 +38,7 @@ def make_settings() -> Settings:
         chunk_overlap=150,
         top_k=4,
         max_cosine_distance=0.65,
+        relevance_distance_margin=0.10,
     )
 
 
@@ -83,3 +84,35 @@ def test_agent_falls_back_when_search_is_not_relevant():
     assert response.answer == FALLBACK_ANSWER
     assert response.sources == ()
     assert ai_client.generated_prompt is None
+
+
+def test_agent_excludes_results_far_from_best_match():
+    ai_client = FakeAiClient()
+    store = FakeVectorStore(
+        [
+            SearchResult(
+                text="A NexaCorp concede 30 dias corridos de férias.",
+                metadata={
+                    "source": "politica_ferias.md",
+                    "category": "rh",
+                    "location": "seção: document",
+                },
+                distance=0.20,
+            ),
+            SearchResult(
+                text="O onboarding apresenta os sistemas internos da empresa.",
+                metadata={
+                    "source": "onboarding.html",
+                    "category": "operacional",
+                    "location": "seção: document",
+                },
+                distance=0.45,
+            ),
+        ]
+    )
+    agent = RagAgent(make_settings(), ai_client, store)
+
+    response = agent.ask("Quantos dias de férias os colaboradores possuem?")
+
+    assert [source.source for source in response.sources] == ["politica_ferias.md"]
+    assert "onboarding.html" not in (ai_client.generated_prompt or "")

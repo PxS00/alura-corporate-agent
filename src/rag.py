@@ -28,11 +28,7 @@ class RagAgent:
 
         query_embedding = self._ai_client.embed_query(question)
         results = self._vector_store.search(query_embedding, self._settings.top_k)
-        relevant = [
-            result
-            for result in results
-            if result.distance <= self._settings.max_cosine_distance
-        ]
+        relevant = self._select_relevant(results)
 
         if not relevant:
             return AgentResponse(answer=FALLBACK_ANSWER)
@@ -41,6 +37,23 @@ class RagAgent:
         answer = self._ai_client.generate(prompt)
         sources = self._build_sources(relevant)
         return AgentResponse(answer=answer, sources=sources)
+
+    def _select_relevant(self, results: list[SearchResult]) -> list[SearchResult]:
+        """Keep results that pass the absolute threshold and remain close to the best match."""
+        eligible = [
+            result
+            for result in results
+            if result.distance <= self._settings.max_cosine_distance
+        ]
+        if not eligible:
+            return []
+
+        best_distance = min(result.distance for result in eligible)
+        relative_limit = min(
+            self._settings.max_cosine_distance,
+            best_distance + self._settings.relevance_distance_margin,
+        )
+        return [result for result in eligible if result.distance <= relative_limit]
 
     @staticmethod
     def _build_prompt(question: str, results: list[SearchResult]) -> str:

@@ -25,6 +25,7 @@ class Settings:
     top_k: int
     max_cosine_distance: float
     llm_fallback_model: str = "gemini-3.5-flash-lite"
+    relevance_distance_margin: float = 0.10
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -43,6 +44,9 @@ class Settings:
             llm_fallback_model=os.getenv(
                 "LLM_FALLBACK_MODEL", "gemini-3.5-flash-lite"
             ).strip(),
+            relevance_distance_margin=float(
+                os.getenv("RELEVANCE_DISTANCE_MARGIN", "0.10")
+            ),
         )
         settings.validate()
         return settings
@@ -58,6 +62,8 @@ class Settings:
             raise ValueError("EMBEDDING_DIMENSIONS deve ser maior que zero.")
         if not 0 <= self.max_cosine_distance <= 2:
             raise ValueError("MAX_COSINE_DISTANCE deve estar entre 0 e 2.")
+        if not 0 <= self.relevance_distance_margin <= 2:
+            raise ValueError("RELEVANCE_DISTANCE_MARGIN deve estar entre 0 e 2.")
 
     def require_api_key(self) -> None:
         if not self.gemini_api_key:
